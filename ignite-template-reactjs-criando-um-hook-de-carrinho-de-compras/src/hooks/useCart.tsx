@@ -22,7 +22,7 @@ interface CartContextData {
 }
 
 const CartContext = createContext<CartContextData>({} as CartContextData);
-const localStorageKey = 'cart-products'
+const localStorageKey = '@RocketShoes:cart'
 
 export function CartProvider({ children }: CartProviderProps): JSX.Element {
 	const [cart, setCart] = useState<Product[]>(() => {
@@ -53,12 +53,17 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
 	const removeProduct = (productId: number) => {
 		try {
+			const searchProduct = cart.find(x => x.id === productId)
+
+			if (!productId || productId == 0 || !searchProduct) throw('Produto não encontrado'); 
+			
 			const productRemoved = cart.filter(x => {
 				if (x.id !== productId) {
 					return x
 				}
 			})
 			localStorageControl(productRemoved)
+				
 		} catch (err) {
 			sendMessage('Erro na remoção do produto', 'error')
 		}
@@ -69,6 +74,8 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 		amount,
 	}: UpdateProductAmount) => {
 		try {
+			if (amount == 0) throw('Erro ao inserir produto')
+
 			const isValid = await verifyExistStockProduct(productId, amount)
 
 			if (isValid) {
