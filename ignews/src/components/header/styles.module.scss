@@ -7,7 +7,6 @@
 .headerContent {
 
    display: flex;
-   max-width: 1120px;
    height: 6rem;
    align-items: center;
 
@@ -53,5 +52,9 @@
          transition: color 0.2s;
          color: var(--white)
       }
+   }
+
+   button { 
+      margin-left: auto;
    }
 }
